@@ -62,6 +62,7 @@ export default function BotArena() {
   const [won, setWon] = useState(false);
   const [confetti, setConfetti] = useState(false);
   const [judging, setJudging] = useState(false);
+  const [noBuild, setNoBuild] = useState(false);
 
   const myIframe = useRef<HTMLIFrameElement>(null);
   const submittedRef = useRef(false);
@@ -147,6 +148,7 @@ export default function BotArena() {
     setFinalMy(null);
     setFinalBot(null);
     setConfetti(false);
+    setNoBuild(false);
     setPrompt(opts?.quick ? "크림 배경 미니멀 히어로, 빨강 버튼 1개, 카드 3개" : prompt);
     setTimeLeft(opts?.quick ? 30 : diffMeta.seconds);
     setPhase("fighting");
@@ -179,6 +181,14 @@ export default function BotArena() {
   const submitMatch = async () => {
     if (submittedRef.current) return;
     submittedRef.current = true;
+    // 빈 빌드(시간 종료까지 한 번도 안 빌드) → 리더보드 오염 방지, 친절 종료
+    if (!myHtml || myHtml.length < 50) {
+      setOverlay(null);
+      setPhase("done");
+      setNoBuild(true);
+      setCaster("🎙️ 시간 종료! 이번엔 빌드를 못 하셨네요. 다음 판엔 더 빨리 빌드해보세요!");
+      return;
+    }
     setJudging(true);
     setCaster(casterLine("submit", Date.now()));
     setOverlay(null);
@@ -467,6 +477,16 @@ export default function BotArena() {
               {streaming ? "빌드 중…" : `빌드 (${editCount}회)`}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* 시간 종료 · 빌드 미완료(리더보드 미기록) */}
+      {phase === "done" && noBuild && (
+        <div className="mt-5 flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white p-8 text-center ambient">
+          <div className="text-4xl">⏱️</div>
+          <div className="text-xl font-bold">시간 종료 — 이번엔 빌드를 못 하셨어요</div>
+          <div className="text-sm text-mute">프롬프트를 입력하고 빌드해야 채점됩니다. 리더보드에는 기록되지 않았어요.</div>
+          <button onClick={() => { setPhase("select"); setOverlay(null); }} className="mt-2 rounded-full bg-red px-6 py-3 font-bold text-cream ease-spring transition hover:scale-[1.03]">다시 도전 →</button>
         </div>
       )}
 
