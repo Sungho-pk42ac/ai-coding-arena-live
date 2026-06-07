@@ -408,11 +408,15 @@ export default function BotArena() {
           {mode === "recreate" ? (
             <TargetFrame target={target} forceShot={forceShot} />
           ) : (
-            <div className="flex h-full items-center justify-center rounded-xl border border-black/10 bg-paper p-8 text-center ambient-sm">
-              <div>
-                <div className="text-4xl">🎨</div>
-                <div className="mt-2 text-xl font-bold">자유 창작</div>
-                <div className="mt-1 text-sm text-mute">타깃 없이 당신의 창의성으로 승부</div>
+            <div className="flex h-full flex-col items-center justify-start gap-4 rounded-xl border border-black/10 bg-gradient-to-br from-paper to-cream p-10 pt-16 text-center ambient-sm">
+              <div className="floaty text-6xl">🎨</div>
+              <div className="text-2xl font-bold">자유 창작 모드</div>
+              <div className="max-w-xs text-sm text-mute">
+                타깃 없이 당신의 상상력으로 승부합니다. 프롬프트로 무엇이든 만들어보세요 — 창의성·완성도·미감으로 채점됩니다.
+              </div>
+              <div className="mt-2 flex flex-wrap justify-center gap-2">
+                <span className="rounded-full bg-red/10 px-3 py-1 text-xs font-semibold text-red">창의성 채점</span>
+                <span className="rounded-full bg-ink/5 px-3 py-1 text-xs text-mute">타깃 없음</span>
               </div>
             </div>
           )}
