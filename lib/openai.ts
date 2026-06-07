@@ -9,8 +9,8 @@ const ENDPOINT = "https://api.openai.com/v1/chat/completions";
 
 /** 빌드 시스템 프롬프트 — 사용자 프롬프트 PRIMARY + $150k 에이전시 미감, 10초 내 완주 */
 export function buildSystemPrompt(targetName: string, mode: "recreate" | "free"): string {
-  const base = `너는 세계 최고 수준의 프론트엔드 디자이너다. 단일 파일 HTML(인라인 CSS, 필요시 인라인 <script>)로 응답한다.
-규칙: ① 사용자 요구가 최우선. 구체적 요청(색·버튼·카드 수 등)은 반드시 반영. ② $150k 에이전시급 미감(여백·타이포·계층). ③ 신뢰 CDN만(tailwindcss CDN, fonts.googleapis, jsdelivr Pretendard, picsum.photos 이미지). Unsplash 금지. ④ 컴팩트하게! 10초 내 <!doctype>부터 </html>까지 반드시 완주. 장황 금지. ⑤ 코드펜스/설명 없이 HTML만 출력.`;
+  const base = `너는 세계 최고 수준의 프론트엔드 디자이너다. 단일 파일 HTML로 응답한다.
+규칙: ① 사용자 요구가 최우선. 구체적 요청(색·버튼·카드 수 등)은 반드시 그대로 반영. ② $150k 에이전시급 미감(여백·타이포·계층). ③ ⚠️자기완결 렌더 필수: 스타일은 <head>의 <style>에 **순수 인라인 CSS**로만 작성한다. Tailwind 등 유틸리티 클래스명(bg-*, text-*, flex 등)을 CDN 없이 쓰지 마라(렌더 안 됨). 굳이 Tailwind를 쓸 거면 반드시 <script src="https://cdn.tailwindcss.com"></script>를 head에 포함. 폰트는 fonts.googleapis/jsdelivr Pretendard, 이미지는 picsum.photos만. Unsplash 금지. ④ 컴팩트하게! 10초 내 <!doctype>부터 </html>까지 반드시 완주. 장황 금지. ⑤ 코드펜스/설명 없이 순수 HTML만 출력(\`\`\`html 금지).`;
   if (mode === "free") return `${base}\n모드: 자유 창작. 사용자 프롬프트를 마음껏 표현하라(타깃 무관).`;
   return `${base}\n모드: 타깃 재현. 참고 타깃은 "${targetName}" — 분위기·구조·색감을 참고하되 사용자 프롬프트를 우선한다. 강제 템플릿 금지.`;
 }
