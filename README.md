@@ -7,6 +7,17 @@
 🟢 **라이브:** https://ai-coding-arena-live.vercel.app
 📦 **Repo:** https://github.com/Sungho-pk42ac/ai-coding-arena-live
 
+## 🖼️ Demo Screenshot
+> 아래는 프로덕션 라이브 화면의 실시간 캡처입니다(자동 최신화).
+
+[![AI 코딩 아레나 — 랜딩](https://image.thum.io/get/width/1200/crop/800/noanimate/https://ai-coding-arena-live.vercel.app)](https://ai-coding-arena-live.vercel.app)
+
+| 랜딩(당신 vs AI) | 명예의 전당 · 랭킹 |
+|---|---|
+| ![landing](https://image.thum.io/get/width/700/crop/520/noanimate/https://ai-coding-arena-live.vercel.app) | ![leaderboard](https://image.thum.io/get/width/700/crop/520/noanimate/https://ai-coding-arena-live.vercel.app/leaderboard) |
+
+> 캡처가 로딩 중이면 잠시 후 새로고침하거나 [라이브 링크](https://ai-coding-arena-live.vercel.app)에서 직접 확인하세요.
+
 ---
 
 ## 핵심 기능
