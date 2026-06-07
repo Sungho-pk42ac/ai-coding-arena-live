@@ -25,7 +25,7 @@
 - **빌드 모델:** `gpt-4o-mini`(나·normal봇), `gpt-4o`(hard봇·비전심판). `max_tokens≈1300`(Hobby 10초 컷 내 `</html>` 완주). runtime=nodejs, maxDuration=10.
 - **영속:** Supabase `aca_submissions`(nickname,target_id,score,bot_score,difficulty,outcome). 키 없으면 인메모리 폴백.
 - **배포:** `git push origin main` → Vercel 서버빌드(자동 승격). `vercel --prebuilt`/`--prod` 직접배포 금지(§F 훅 차단). 비대화 배포 폴백 `vercel --prod --yes --scope pk42acs-projects`.
-- **인프라:** repo=ASCII `ai-coding-arena-live-20260607`(충돌 시 `-r2`), Vercel scope `pk42acs-projects`. 작업폴더=현재 cwd(`C:\dev\새 폴더`, OneDrive 밖) 그대로.
+- **인프라:** repo=ASCII `ai-coding-arena-live`(사용자 지정·생성 완료), Vercel scope `pk42acs-projects`. 작업폴더=현재 cwd(`C:\dev\새 폴더`, OneDrive 밖) 그대로.
 - **스택:** Next.js(App Router)·React 19·TS·Tailwind v4 / Vercel / OpenAI / html2canvas / Supabase(REST).
 - **폰트:** Pretendard(한글)+Geist/Manrope(영문). `word-break:keep-all`.
 

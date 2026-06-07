@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<!-- AI 코딩 아레나 피치덱 · BOJ 훅 3슬라이드 + 제품 7슬라이드 (총 10) · 하네스 1슬라이드 · 다크→밝은 전환 -->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 코딩 아레나 · 피치덱</title>
+  <link rel="preconnect" href="https://rsms.me/" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --cream:#f4f0ea; --ink:#111; --accent:#d93a1c; --rule:#1a1a1a; --mute:#6b6359; --paper:#faf7f0;
+      --kr:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+      --font:"Inter",-apple-system,BlinkMacSystemFont,var(--kr);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#0a0a0a;
+      font-family:var(--font);font-feature-settings:'ss01','ss03','cv11'}
+    .stage{position:fixed;inset:0;overflow:hidden;background:#0a0a0a}
+    .canvas{position:absolute;top:50%;left:50%;width:1920px;height:1080px;background:var(--cream);
+      transform:translate(-50%,-50%) scale(1);transform-origin:center;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.3)}
+    .slide{position:absolute;inset:0;display:none;color:var(--ink);padding:96px 160px}
+    .slide.active{display:block}
+    .folio{position:absolute;top:96px;left:160px;font-size:15px;letter-spacing:.2em;font-weight:500;text-transform:uppercase;color:var(--mute);font-variant-numeric:tabular-nums}
+    .brand{position:absolute;top:96px;right:160px;font-size:15px;letter-spacing:.2em;font-weight:600;text-transform:uppercase;color:var(--ink)}
+    .rule{border:none;border-top:1px solid var(--rule);margin:0}
+    .accent{color:var(--accent)}
+    h1,h2,h3{font-weight:500;letter-spacing:-.02em;margin:0;line-height:1.04}
+    .kr{font-family:var(--kr)}
+    .eyebrow{font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);font-weight:500}
+    .eyebrow .num{color:var(--accent);font-weight:600;margin-right:14px}
+    .eyebrow-top{display:none}
+    .eyebrow-top .rule{margin-bottom:28px}
+
+    /* ===== 다크 인트로 (BOJ 훅) ===== */
+    .slide.dark{background:#0c0c0d;color:#e8e4da}
+    .slide.dark .folio{color:#6a6a6a}
+    .slide.dark .brand{color:#cfcabf}
+    .slide.dark .rule{border-color:#2a2a2a}
+    .slide.dark .eyebrow{color:#8a8676}
+    .boj{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+    .boj .t{font-family:var(--kr);font-size:100px;font-weight:600;letter-spacing:-.03em}
+    .boj .dates{font-size:26px;color:#8a8676;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+    .boj .msg{font-family:var(--kr);font-size:30px;color:#cfcabf;margin-top:4px}
+    .boj .cd{display:flex;gap:52px;margin-top:46px}
+    .boj .cd .u{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .boj .cd .n{width:132px;height:132px;border-radius:50%;background:#17171a;border:1px solid #2a2a2a;
+      display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:700;font-variant-numeric:tabular-nums}
+    .boj .cd .l{font-family:var(--kr);font-size:21px;color:#8a8676}
+    .slide.dark .statement .big{color:#f4f0ea}
+    .slide.dark .statement .sup{color:#9a958a}
+    .pivot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 200px}
+    .pivot .big{font-family:var(--kr);font-size:86px;font-weight:600;line-height:1.16;letter-spacing:-.025em;color:#f4f0ea}
+    .pivot .sub{font-family:var(--kr);font-size:30px;color:#9a958a;margin-top:42px;line-height:1.5}
+    .pivot .sub b{color:#e8e4da;font-weight:600}
+
+    /* S1 title */
+    .s1 .title{font-family:var(--kr);font-size:128px;font-weight:600;letter-spacing:-.04em;line-height:1;margin-top:30px}
+    .s1 .sub{position:absolute;bottom:96px;left:160px;right:160px;display:flex;justify-content:space-between;align-items:flex-end;gap:64px}
+    .s1 .sub p{font-size:26px;max-width:820px;font-family:var(--kr);line-height:1.45;margin:0}
+    .s1 .sub p b{color:var(--accent)}
+    .s1 .sub .credit{font-family:var(--kr);font-size:22px;color:var(--mute);line-height:1.7;text-align:right}
+    .s1 .sub .credit b{color:var(--ink);font-weight:600}
+
+    /* statement */
+    .statement{position:absolute;left:160px;right:160px;top:300px}
+    .statement .big{font-family:var(--kr);font-size:104px;font-weight:600;line-height:1.06;letter-spacing:-.025em;max-width:18ch}
+    .statement .sup{font-family:var(--kr);font-size:28px;color:var(--mute);margin-top:40px;line-height:1.5;max-width:44ch}
+    .tags{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+    .tag{font-family:var(--font);font-size:20px;font-weight:500;color:var(--ink);border:1px solid var(--rule);padding:10px 18px}
+    .tag.kr{font-family:var(--kr)}
+
+    /* data grid */
+    .grid3{position:absolute;left:160px;right:160px;top:320px;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
+    .grid3 .cell{padding:48px 0;border-bottom:1px solid var(--rule)}
+    .grid3 .cell+.cell{border-left:1px solid var(--rule);padding-left:48px}
+    .grid3 .layer{font-size:22px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+    .grid3 .h{font-family:var(--kr);font-size:42px;font-weight:600;margin-top:16px}
+    .grid3 .d{font-family:var(--kr);font-size:21px;color:var(--mute);margin-top:18px;line-height:1.5;max-width:28ch}
+
+    /* desktop showcase */
+    .deskwrap{position:absolute;left:160px;right:160px;top:250px;bottom:120px;display:grid;grid-template-columns:0.72fr 1.28fr;gap:80px;align-items:center}
+    .deskwrap .lead{font-family:var(--kr);font-size:72px;font-weight:600;line-height:1.08;letter-spacing:-.025em}
+    .deskwrap .desc{font-family:var(--kr);font-size:24px;color:var(--mute);margin-top:28px;line-height:1.5;max-width:26ch}
+    .deskshot{width:100%;border:1px solid var(--rule);box-shadow:0 24px 50px rgba(0,0,0,.22);display:block}
+    .ph{width:100%;height:560px;border:1px dashed var(--mute);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--mute);text-align:center;padding:5%;background:var(--paper)}
+    .ph .pt{font-size:24px;font-weight:600;color:var(--ink);font-family:var(--kr)}
+
+    /* 위임 증거 */
+    .evid{position:absolute;left:160px;right:160px;top:250px;bottom:120px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+    .code{background:#15140f;color:#e8e4da;border:1px solid var(--rule);border-radius:10px;padding:34px 36px;font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:21px;line-height:1.7}
+    .code .c{color:#8a8676} .code .k{color:#e0894a} .code .r{color:#e86a4a}
+    .evid .slot{display:flex;flex-direction:column;gap:24px}
+    .evid .ph2{border:1px dashed var(--mute);border-radius:10px;padding:30px 32px;background:var(--paper)}
+    .evid .ph2 .lab{font-size:15px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600}
+    .evid .ph2 .t{font-family:var(--kr);font-size:30px;font-weight:600;margin-top:10px}
+    .evid .ph2 .n{font-family:var(--kr);font-size:19px;color:var(--mute);margin-top:8px}
+
+    /* close */
+    .slide.active.s14{display:grid;place-items:center;text-align:center}
+    .s14 .mark{font-family:var(--kr);font-size:120px;font-weight:600;letter-spacing:-.03em;margin-bottom:48px}
+    .s14 .contact{font-family:var(--kr);font-size:26px;color:var(--mute);line-height:1.7}
+    .s14 .contact b{color:var(--ink);font-weight:600}
+
+    .chrome{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;z-index:10;color:#fff;font-size:13px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);padding:8px 12px;border-radius:6px;font-family:'Inter',sans-serif}
+    .chrome button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);color:#fff;font:inherit;padding:6px 12px;border-radius:4px;cursor:pointer}
+    .counter{opacity:.6;min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+
+    @media print{
+      @page{size:1920px 1080px;margin:0}
+      html,body{overflow:visible;height:auto;background:#fff}
+      .stage{position:static}
+      .canvas{transform:none!important;box-shadow:none}
+      .slide{display:block!important;position:relative;inset:auto;width:1920px;height:1080px;page-break-after:always}
+      .chrome{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="stage"><div class="canvas" id="canvas">
+
+    <!-- 01 BOJ 종료 훅 (다크 + 라이브 카운트다운) -->
+    <section class="slide active dark" data-screen-label="01"><span class="folio">01 / 10</span><span class="brand">바이브코딩 시대의 백준</span>
+      <div class="boj">
+        <div class="t">BOJ 서비스 종료</div>
+        <div class="dates">2010.03.19 — 2026.04.28</div>
+        <div class="msg">16년, 국내 대표 코딩 평가 플랫폼이 사라진다.</div>
+        <div class="cd">
+          <div class="u"><div class="n" id="cd-d">--</div><div class="l">일</div></div>
+          <div class="u"><div class="n" id="cd-h">--</div><div class="l">시</div></div>
+          <div class="u"><div class="n" id="cd-m">--</div><div class="l">분</div></div>
+          <div class="u"><div class="n" id="cd-s">--</div><div class="l">초</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 위기 (다크) -->
+    <section class="slide dark" data-screen-label="02"><span class="folio">02 / 10</span><span class="brand">바이브코딩 시대의 백준</span>
+      <div class="eyebrow-top"><hr class="rule" /><div class="eyebrow"><span class="num">!</span>CRISIS</div></div>
+      <div class="statement">
+        <div class="big">이제 뭐로<br />실력을 증명하지?</div>
+        <div class="sup">알고리즘 문제는 이제 AI가 다 푼다. 백준마저 사라진다. 그럼… 코딩, 아직 의미 있나?</div>
+      </div>
+    </section>
+
+    <!-- 03 피벗 (다크 → 다음 슬라이드에서 밝음으로 전환) -->
+    <section class="slide dark" data-screen-label="03"><span class="folio">03 / 10</span><span class="brand">바이브코딩 시대의 백준</span>
+      <div class="pivot">
+        <div class="big">이젠 실력은 '얼마나 잘 푸나'가 아니라<br /><span class="accent">'얼마나 잘 시키나'</span>다.</div>
+        <div class="sub">코딩은 죽지 않았다 — <b>형태</b>가 바뀌었다. 프롬프트 엔지니어링이 새 기본기.</div>
+      </div>
+    </section>
+
+    <!-- 04 제품 타이틀 (밝음으로 전환) -->
+    <section class="slide s1" data-screen-label="04"><span class="folio">04 / 10</span><span class="brand">AI 코딩 아레나</span>
+      <h1 class="title">바이브코딩,<br /><span class="accent">잘하시나요?</span></h1>
+      <div class="sub">
+        <p>백준이 떠난 자리 — 프롬프트 실력을 백준처럼 측정·훈련하는 곳. <b>바이브코딩 시대의 백준.</b></p>
+        <div class="credit">AI 코딩 아레나<br /><b>ai-coding-arena-live.vercel.app</b></div>
+      </div>
+    </section>
+
+    <!-- 05 Problem -->
+    <section class="slide" data-screen-label="05"><span class="folio">05 / 10</span><span class="brand">AI 코딩 아레나</span>
+      <div class="eyebrow-top"><hr class="rule" /><div class="eyebrow"><span class="num">01</span>PROBLEM</div></div>
+      <div class="statement">
+        <div class="big">프롬프트 실력,<br />잴 곳이 없다.</div>
+        <div class="sup">바이브 코딩 시대 — 누가 더 잘 시키나? 연습할 곳도, 겨룰 무대도, 측정할 점수도 없다.</div>
+        <div class="tags"><span class="tag kr">프롬프트 엔지니어링</span><span class="tag kr">측정 불가</span><span class="tag kr">동기 부족</span></div>
+      </div>
+    </section>
+
+    <!-- 06 Solution + 라이브 데모 전환 -->
+    <section class="slide" data-screen-label="06"><span class="folio">06 / 10</span><span class="brand">AI 코딩 아레나</span>
+      <div class="eyebrow-top"><hr class="rule" /><div class="eyebrow"><span class="num">02</span>라이브 데모</div></div>
+      <div class="deskwrap">
+        <div>
+          <div class="lead">AI 봇과 실시간 코딩 대결<span class="accent">— 지금, 라이브로.</span></div>
+          <div class="desc">제한시간 안에 프롬프트를 고쳐가며 빌드 → gpt-4o 비전이 채점 → 봇 격파. 실 AI·Supabase 영속까지 검증 완료.</div>
+          <div class="tags"><span class="tag kr">토큰 스트리밍</span><span class="tag kr">비전 심판</span><span class="tag kr">안 깨지는 데모</span></div>
+        </div>
+        <div class="visual">
+          <img class="deskshot" src="assets/landing.png" alt="AI 코딩 아레나 라이브"
+            onerror="this.outerHTML='&lt;div class=\'ph\'&gt;&lt;div class=\'pt\'&gt;라이브 스크린샷&lt;/div&gt;&lt;div&gt;assets/landing.png&lt;/div&gt;&lt;/div&gt;'" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 하네스 (정직판 — 오픈소스 조합 + 검증 설계, 1슬라이드) -->
+    <section class="slide" data-screen-label="07"><span class="folio">07 / 10</span><span class="brand">AI 코딩 아레나</span>
+      <div class="eyebrow-top"><hr class="rule" /><div class="eyebrow"><span class="num">04</span>HOW WE BUILT IT</div></div>
+      <div class="grid3">
+        <div class="cell"><div class="layer">오픈소스 조합</div><div class="h kr">남들도 쓰는 도구</div><div class="d">Claude Code · OMC(ralph 자율루프) · Chrome MCP · Vercel·Supabase·OpenAI.</div></div>
+        <div class="cell"><div class="layer">내가 설계</div><div class="h kr">위임 + 검증 시스템</div><div class="d">README 스펙(결정·함정·검증규율) + 강제 훅 + MCP 자가검증 게이트로 묶음.</div></div>
+        <div class="cell"><div class="layer">결과</div><div class="h kr">90분 무인 빌드</div><div class="d">빈 repo → 자율 빌드·배포. 발명이 아니라 '제대로 조합·검증'한 것.</div></div>
+      </div>
+    </section>
+
+    <!-- 09 창의 -->
+    <section class="slide" data-screen-label="08"><span class="folio">08 / 10</span><span class="brand">AI 코딩 아레나</span>
+      <div class="eyebrow-top"><hr class="rule" /><div class="eyebrow"><span class="num">05</span>창의</div></div>
+      <div class="statement">
+        <div class="big">사람 vs AI,<br />그리고 <span class="accent">AI vs AI.</span></div>
+        <div class="sup">게임화 — XP·랭크·등급(S~D)·연승·콘페티·VS 풀스크린 연출·봇 트래시토크. 멀티 LLM(GPT vs Gemini) 대결로 확장.</div>
+        <div class="tags"><span class="tag kr">게임화</span><span class="tag kr">실시간 캐스터</span><span class="tag kr">멀티 LLM</span></div>
+      </div>
+    </section>
+
+    <!-- 10 임팩트 -->
+    <section class="slide" data-screen-label="09"><span class="folio">09 / 10</span><span class="brand">AI 코딩 아레나</span>
+      <div class="eyebrow-top"><hr class="rule" /><div class="eyebrow"><span class="num">06</span>임팩트</div></div>
+      <div class="grid3">
+        <div class="cell"><div class="layer">Learn</div><div class="h kr">프롬프트 연습장</div><div class="d">지면 AI가 프롬프트를 고쳐주고 재도전 — 놀며 느는 프롬프트 엔지니어링.</div></div>
+        <div class="cell"><div class="layer">Viral</div><div class="h kr">바이럴 루프</div><div class="d">글로벌 랭킹·명예의 전당·OG 공유 카드로 자발적 확산.</div></div>
+        <div class="cell"><div class="layer">Scale</div><div class="h kr">확장(다음 시즌)</div><div class="d">프롬프트 기본기 → 다음 시즌 '하네스 엔지니어링' 평가로 사다리 확장.</div></div>
+      </div>
+    </section>
+
+    <!-- 11 Close -->
+    <section class="slide s14" data-screen-label="10"><span class="folio">10 / 10</span><span class="brand">AI 코딩 아레나</span>
+      <div>
+        <div class="mark kr">바이브코딩, <span class="accent">해보시죠.</span></div>
+        <div class="contact">바이브코딩 시대의 백준 · AI 코딩 아레나<br /><b>ai-coding-arena-live.vercel.app</b></div>
+      </div>
+    </section>
+
+  </div></div>
+
+  <nav class="chrome"><button id="prev">← 이전</button><span class="counter" id="counter">1/10</span><button id="next">다음 →</button></nav>
+
+  <script>
+    (function(){
+      var canvas=document.getElementById('canvas');
+      var slides=[].slice.call(document.querySelectorAll('.slide'));
+      var counter=document.getElementById('counter');
+      var KEY='aca-deck-idx';
+      var idx=Number(localStorage.getItem(KEY))||0;
+      if(idx<0||idx>=slides.length) idx=0;
+      function go(to){idx=Math.max(0,Math.min(slides.length-1,to));
+        slides.forEach(function(s,i){s.classList.toggle('active',i===idx)});
+        counter.textContent=(idx+1)+'/'+slides.length;localStorage.setItem(KEY,String(idx));}
+      function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);
+        canvas.style.transform='translate(-50%,-50%) scale('+s+')';}
+      document.getElementById('prev').onclick=function(){go(idx-1)};
+      document.getElementById('next').onclick=function(){go(idx+1)};
+      addEventListener('keydown',function(e){
+        if(['ArrowLeft','PageUp'].indexOf(e.key)>-1)go(idx-1);
+        if(['ArrowRight','PageDown',' '].indexOf(e.key)>-1){e.preventDefault();go(idx+1)}
+        if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);});
+      addEventListener('resize',fit); fit(); go(idx);
+
+      // BOJ 라이브 카운트다운 (2026-04-28 00:00 KST). 지나면 0으로 클램프.
+      var TARGET=new Date('2026-04-28T00:00:00+09:00').getTime();
+      var p2=function(n){return (n<10?'0':'')+n;};
+      function tick(){
+        var diff=Math.max(0, TARGET-Date.now());
+        var s=Math.floor(diff/1000);
+        var d=Math.floor(s/86400), h=Math.floor((s%86400)/3600), m=Math.floor((s%3600)/60), sec=s%60;
+        var E=function(id){return document.getElementById(id);};
+        if(E('cd-d')){E('cd-d').textContent=p2(d);E('cd-h').textContent=p2(h);E('cd-m').textContent=p2(m);E('cd-s').textContent=p2(sec);}
+      }
+      tick(); setInterval(tick,1000);
+    })();
+  </script>
+</body>
+</html>
