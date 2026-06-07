@@ -1,5 +1,6 @@
 // 랜딩 — "AI vs 인간" 후킹 (Warm Editorial, 스플릿 히어로)
 import Link from "next/link";
+import { TARGETS } from "@/lib/targets";
 
 export default function Home() {
   return (
@@ -50,6 +51,20 @@ export default function Home() {
             </div>
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red px-5 py-3 text-2xl font-black text-cream ambient">VS</div>
           </div>
+        </div>
+      </section>
+
+      {/* 신뢰 마퀴 — 12개 dev 타깃 브랜드 */}
+      <section className="overflow-hidden border-y border-black/10 py-6">
+        <div className="mb-3 text-center text-[11px] font-semibold uppercase tracking-[0.15em] text-mute">
+          12개 유명 dev 사이트가 타깃으로 출제됩니다
+        </div>
+        <div className="relative flex w-max marquee gap-12 pr-12">
+          {[...TARGETS, ...TARGETS].map((t, i) => (
+            <span key={i} className="whitespace-nowrap text-2xl font-extrabold tracking-tight text-ink/35">
+              {t.name}
+            </span>
+          ))}
         </div>
       </section>
 
